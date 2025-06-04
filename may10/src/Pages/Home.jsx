@@ -12,7 +12,7 @@ import {useSelector} from 'react-redux'
 
 function Home() {
 
-   let {cat,setCat,input,setShow,show}=useContext(dataContext)
+   let {cat,setCat,setShow,show}=useContext(dataContext)
 
    function hello(category) {
     if (category === 'All') {
@@ -24,18 +24,17 @@ function Home() {
     }
     }
    const selector=useSelector(state=>state.counter)
-   const subtotal =selector.reduce((total,item)=>total+Number(item.price),0)
-   const tax=Number((subtotal*2/100).toFixed(0));
+   const subtotal =selector.reduce((total,item)=>total+(item.quantity*item.price),0)
    const delievry=200;
-   const total=subtotal+tax+delievry
+   const total=subtotal+delievry
+   const totalitems=selector.reduce((acc,item)=>acc+item.quantity,0)
 
    console.log(total,'total is');
-   
-
+  
     return (
     <div className='bg-emerald-100 w-full min-h-screen rounded-md'>
       <Nav/>
-      {!input?(
+      
       <div className='flex flex-wrap justify-center items-center gap-5 w-[100%]'>
         {Categories.map((item, index) => (
           <div 
@@ -47,7 +46,7 @@ function Home() {
             {item.name}
           </div>
         ))}
-      </div>):null}
+      </div>
 
       <div className='flex flex-wrap gap-3 justify-center items-center pt-5 pb-5'>
         {cat.map((item) => (
@@ -62,11 +61,18 @@ function Home() {
         ))}
       </div>
 
-      <div className={`w-full md:w-[50vw] lg:w-[40vw] h-[100%] fixed top-0 right-0 bg-white shadow-lg p-6 transition-all duration-500 ${show?'translate-x-0' :'translate-x-full'}`}>
+      <div className={`w-full md:w-[50vw] lg:w-[40vw]  fixed  min-h-screen top-0  right-0 bg-white shadow-lg p-6 transition-all duration-500   ${show?'translate-x-0' :'translate-x-full'}`}>
+        <div className='top-0 sticky overflow-y-auto h-[100vh] pb-8 overflow-hidden'>
+
       <header className='flex justify-between items-center w-[100%]'>
-        <span className='text-[15px] font-semibold text-emerald-600 font-serif'>Order Items</span>
+        <span className='text-[15px] font-semibold text-emerald-600 font-serif uppercase'>shopping cart <span className='font-sans uppercase'> ({totalitems})</span></span>
         <RxCross2 className='text-emerald-300 text-[18px] w-[25px] h-[25px] hover:text-emerald-700 cursor-pointer font-serif font-bold' onClick={()=>setShow(false)}/>
       </header>
+
+      {/* add item if not then empty card show */}
+       {
+       selector.length>0? 
+        <>
 
       <div className='flex flex-col gap-3 w-full mt-5'>
 
@@ -90,11 +96,7 @@ function Home() {
           <span className='text-xl text-green-500 font-semibold font-serif'>Rs/{delievry}-</span>
         </div>
 
-         
-         <div className='flex justify-between items-center w-full'>
-          <span className='text-xl text-green-500 font-semibold font-serif'>Taxes</span>
-          <span className='text-xl text-green-500 font-semibold font-serif'>Rs/{tax}-</span>
-        </div>     
+        
        </div>
 
        <div className='flex justify-between items-center w-full p-6'>
@@ -102,9 +104,23 @@ function Home() {
         <span className='text-xl text-green-500 font-semibold font-serif'>PKR Rs/{total}-</span>
 
        </div>
+       
+      
    
+   <div className='w-[60%] p-4 bg-emerald-400 text-center m-auto rounded-md'>
+    <button className='font-bold text-white font-serif text-[20px]'>place order</button>
+   </div>
+
+   </>:
+
+   <div className='text-emerald-600 font-serif text-2xl'>Your cart is empty</div>
+       }
+  
       </div>
+
     </div>
+    </div>
+
   );
 }
 

@@ -1,5 +1,5 @@
 import { ImBin } from "react-icons/im";
-import {Delete} from '../Redux/counterSlice.js'
+import {Delete, increasing,decreasing} from '../Redux/counterSlice.js'
 import { useDispatch } from "react-redux";
 
 function Card2  ({id,name,price,image,quantity})  {
@@ -16,9 +16,9 @@ function Card2  ({id,name,price,image,quantity})  {
            <div className='w-[60%] h-full flex flex-col'> 
            <div className=' text-sm md:text-lg text-emerald-600 font-serif'>{name}</div>
            <div className='w-[full] bg-white h-[50px] flex shadow-lg hover:border-2 border-emerald-400 hover:transition-all'>
-            <button className='w-[30%] h-full  flex justify-center items-center'>-</button>
+            <button className='w-[30%] h-full  flex justify-center items-center' onClick={()=>{quantity>1?dispatch(decreasing({id})):1}}>-</button>
             <span className='w-[40%] h-full bg-slate-300 flex justify-center items-center'>{quantity}</span>
-            <button className='w-[30%] h-full  flex justify-center items-center'>+</button>
+            <button className='w-[30%] h-full  flex justify-center items-center' onClick={()=>dispatch(increasing({id}))}>+</button>
            </div>
            </div>
            </div>
